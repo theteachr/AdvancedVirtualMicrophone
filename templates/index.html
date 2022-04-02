@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sheeeeeeesh</title>
+    <title>AVM | Web GUI</title>
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
 </head>
     <style>
@@ -14,11 +14,11 @@
         }
         #main{
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: row;
+            gap: 1rem;
         }
         #main > div{
-            width: 100vw;
-            height: fit-content;
+            width: 50%;
         }
         nav{
             position: sticky;
@@ -40,9 +40,8 @@
           <li><strong>Advanced Virtual Microphone</strong></li>
         </ul>
         <ul>
-            <li><a href="#sinkinput" role="button" class="secondary">Sink inputs</a></li>
-            <li><a href="#sources" role="button" class="secondary">Sources</a></li>
             <li><a href="#up" role="button" class="secondary">Up</a></li>
+            <li><a href="#bottom" role="button" class="secondary">Bottom</a></li>
         </ul>
     </nav>
     <div class="container-fluid">
@@ -61,6 +60,7 @@
             </div>
         </div>
     </div>
+    <span id="bottom"></span>
 </body>
     <script>
         function resizeIframe(obj) {

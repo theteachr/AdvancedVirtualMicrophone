@@ -17,7 +17,7 @@ class StreamManager:
         _si = StreamedInput(device_info, self.fifo_file, self)
         self.streams[device_info.index] = _si
 
-    def kill_pipe(self, sink: StreamedInput):
+    def kill_pipe(self, sink):
         if sink.index not in self.streams: return
         try:
             _streamed_input = self.streams.pop(sink.index)
