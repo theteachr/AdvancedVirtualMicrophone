@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+</head>
+<style>
+    body{
+        display: flex;
+        text-align: center;
+        place-content: center;
+    }
+    button{
+        max-width: 320px;
+    }
+    #red{
+        background-color: red;
+        border: none;
+    }
+    #green{
+        background-color: green;
+        border: none;
+    }
+    html::-webkit-scrollbar {
+        display: none;
+    }
+</style>
+<body>
+    {% for index, obj in objs.items() %}
+        {% if isinstance(obj, StreamedInput) %}
+        <form action="/api/sink-inputs/{{ obj.sink_input.index }}/unload" method="POST">
+            <p>
+                INPUT_ID: {{ index }} <br>
+                NAME: {{ obj.sink_input.proplist.get('application.name') }} <br>
+                BINARY: {{ obj.sink_input.proplist.get('application.process.binary') }} <br>
+                PID: {{ obj.sink_input.proplist.get('application.process.id') }}
+            </p>
+            <button id="green">Unload</button>
+        </form>
+        {% elif isinstance(obj, PulseSinkInputInfo) %}
+        <form action="/api/sink-inputs/{{ obj.index }}/load" method="POST">
+            <p>
+                INPUT_ID: {{ index }} <br>
+                NAME: {{ obj.proplist.get('application.name') }} <br>
+                BINARY: {{ obj.proplist.get('application.process.binary') }} <br>
+                PID: {{ obj.proplist.get('application.process.id') }}
+            </p>
+            <button id="red">Load</button>
+        </form>
+        {% elif isinstance(obj, PulseSourceInfo) %}
+        <form action="/api/sources/{{ obj.index }}/load" method="POST">
+            <p>
+                INPUT_ID: {{ index }} <br>
+                DESC: {{ obj.description }} <br>
+                MUTED: {{ obj.mute }}<br>
+                INFO: {{ obj.channels }} channels {{ obj.volumes }}
+            </p>
+            <button id="red">Load</button>
+        </form>
+        {% endif %}
+    {% endfor %}
+</body>
+</html>

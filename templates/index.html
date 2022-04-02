@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sheeeeeeesh</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+</head>
+    <style>
+        html, body{
+            margin: 0;
+            scroll-behavior: smooth;
+        }
+        #main{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        #main > div{
+            width: 100vw;
+            height: fit-content;
+        }
+        nav{
+            position: sticky;
+            background-color: #1f2d38;
+            top: 0;
+            z-index: 100;
+            padding: 10px 30px;
+            border-radius: 0 0 5px 5px;
+            margin-inline: 10px;
+        }
+
+        html::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<body id="up">
+    <nav>
+        <ul>
+          <li><strong>Advanced Virtual Microphone</strong></li>
+        </ul>
+        <ul>
+            <li><a href="#sinkinput" role="button" class="secondary">Sink inputs</a></li>
+            <li><a href="#sources" role="button" class="secondary">Sources</a></li>
+            <li><a href="#up" role="button" class="secondary">Up</a></li>
+        </ul>
+    </nav>
+    <div class="container-fluid">
+        <div id="main">
+            <div>
+                <article id="sinkinput">
+                    <header>Sink inputs</header>
+                    <iframe src="/sink-inputs" onload="resizeIframe(this)" width="100%"></iframe>
+                </article>
+            </div>
+            <div>
+                <article id="sources">
+                    <header>Sources</header>
+                    <iframe src="/sources" onload="resizeIframe(this)" width="100%"></iframe>
+                </article>
+            </div>
+        </div>
+    </div>
+</body>
+    <script>
+        function resizeIframe(obj) {
+            obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+        }
+    </script>
+</html>
