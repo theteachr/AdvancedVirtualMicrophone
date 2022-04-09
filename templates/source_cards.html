@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buttons</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+</head>
+<style>
+    body{
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+    button{
+        min-width: 320px;
+    }
+    #container-form{
+        padding: 1rem;
+        border: 2px solid rgba(255, 255, 255, 0.473);
+        border-radius: 5px;
+    }
+    #red{
+        background-color: red;
+        border: none;
+    }
+    #green{
+        background-color: green;
+        border: none;
+    }
+    html::-webkit-scrollbar {
+        display: none;
+    }
+</style>
+<body>
+    {% for index, obj in objs.items() %}
+        {% if obj.avm_loaded %}
+        <form action="/api/{{current_device.info.owner_module}}/sources/{{ obj.index }}/unload" method="POST">
+            <div id="container-form">
+                <p>
+                    INPUT_ID: {{ index }} <br>
+                    DESC: {{ obj.proplist.get('device.description') }}
+                </p>
+                <button id="green">Unload</button>
+            </div>
+        </form>
+        {% else %}
+        <form action="/api/{{current_device.info.owner_module}}/sources/{{ obj.index }}/load" method="POST">
+            <div id="container-form">
+                <p>
+                    INPUT_ID: {{ index }} <br>
+                    DESC: {{ obj.proplist.get('device.description') }}
+                </p>
+                <button id="red">Load</button>
+            </div>
+        </form>
+        {% endif %}
+    {% endfor %}
+</body>
+</html>

@@ -37,9 +37,20 @@
 <body id="up">
     <nav>
         <ul>
-          <li><strong>Advanced Virtual Microphone</strong></li>
+            <li><strong>Advanced Virtual Microphone</strong></li>
         </ul>
         <ul>
+            <details role="list">
+                <!-- current device -->
+                <summary aria-haspopup="listbox" role="button" class="secondary">
+                    #{{ current_device.info.index }} {{ current_device.info.name }}
+                </summary>
+                <ul role="listbox">
+                    {% for device in devices %} <!-- current other devices -->
+                        <li><a href="/{{current_device.info.owner_module}}">#{{ device.info.index }} {{ device.info.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </details>
             <li><a href="#up" role="button" class="secondary">Up</a></li>
             <li><a href="#bottom" role="button" class="secondary">Bottom</a></li>
         </ul>
@@ -49,13 +60,13 @@
             <div>
                 <article id="sinkinput">
                     <header>Sink inputs</header>
-                    <iframe src="/sink-inputs" onload="resizeIframe(this)" width="100%"></iframe>
+                    <iframe src="/{{current_device.info.owner_module}}/sink-inputs" onload="resizeIframe(this)" width="100%"></iframe>
                 </article>
             </div>
             <div>
                 <article id="sources">
                     <header>Sources</header>
-                    <iframe src="/sources" onload="resizeIframe(this)" width="100%"></iframe>
+                    <iframe src="/{{current_device.info.owner_module}}/sources" onload="resizeIframe(this)" width="100%"></iframe>
                 </article>
             </div>
         </div>

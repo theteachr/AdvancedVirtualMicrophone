@@ -36,20 +36,8 @@
 </style>
 <body>
     {% for index, obj in objs.items() %}
-        {% if isinstance(obj, StreamedInput) %}
-        <form action="/api/sink-inputs/{{ obj.sink_input.index }}/unload" method="POST">
-            <div id="container-form">
-                <p>
-                    INPUT_ID: {{ index }} <br>
-                    NAME: {{ obj.sink_input.proplist.get('application.name') }} <br>
-                    BINARY: {{ obj.sink_input.proplist.get('application.process.binary') }} <br>
-                    PID: {{ obj.sink_input.proplist.get('application.process.id') }}
-                </p>
-                <button id="green">Unload</button>
-            </div>
-        </form>
-        {% elif isinstance(obj, PulseSinkInputInfo) %}
-        <form action="/api/sink-inputs/{{ obj.index }}/load" method="POST">
+        {% if obj.avm_loaded %}
+        <form action="/api/{{ current_device.info.owner_module }}/sink-inputs/{{ obj.index }}/unload" method="POST">
             <div id="container-form">
                 <p>
                     INPUT_ID: {{ index }} <br>
@@ -57,17 +45,17 @@
                     BINARY: {{ obj.proplist.get('application.process.binary') }} <br>
                     PID: {{ obj.proplist.get('application.process.id') }}
                 </p>
-                <button id="red">Load</button>
+                <button id="green">Unload</button>
             </div>
         </form>
-        {% elif isinstance(obj, PulseSourceInfo) %}
-        <form action="/api/sources/{{ obj.index }}/load" method="POST">
+        {% else %}
+        <form action="/api/{{ current_device.info.owner_module }}/sink-inputs/{{ obj.index }}/load" method="POST">
             <div id="container-form">
                 <p>
                     INPUT_ID: {{ index }} <br>
-                    DESC: {{ obj.description }} <br>
-                    MUTED: {{ obj.mute }}<br>
-                    INFO: {{ obj.channels }} channels {{ obj.volumes }}
+                    NAME: {{ obj.proplist.get('application.name') }} <br>
+                    BINARY: {{ obj.proplist.get('application.process.binary') }} <br>
+                    PID: {{ obj.proplist.get('application.process.id') }}
                 </p>
                 <button id="red">Load</button>
             </div>

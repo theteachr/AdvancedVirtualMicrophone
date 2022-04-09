@@ -1,13 +1,18 @@
+from typing import Dict, Any
+
 import pulsectl_asyncio
 from pulsectl import PulseSinkInputInfo, PulseSourceInfo
 from quart import Quart, render_template
 from werkzeug.exceptions import UnprocessableEntity
-from avmlib.constraints import Constraints
-from avmlib.stream_manager import StreamManager, StreamedInput
+from icecream import install
+
+from avmlib import AVMUtils, AVMDevice
+
+install()
 
 app: Quart = None
 pulse: pulsectl_asyncio.PulseAsync = None
-stream_manager: StreamManager = None
+avm_devices: dict[int, AVMDevice] = {}
 
 
 async def _setup_error_handlers():
@@ -20,17 +25,12 @@ async def _setup_pa_session():
     global pulse
     pulse = pulsectl_asyncio.PulseAsync()
     await pulse.connect()
-    if not len(list(filter(lambda _: _.name == Constraints.input_name and _.description == Constraints.input_desc,
-                           await pulse.source_list()))):
-        await pulse.module_load('module-pipe-source',
-                                f'source_name={Constraints.input_name} file={Constraints.fifo_path} '
-                                f'format={Constraints.pcm_sample_format} rate={Constraints.bitrate} channels={Constraints.channels} '
-                                f'source_properties=device.description="{Constraints.input_desc}"')
 
 
-async def _setup_stream_manager():
-    global stream_manager
-    stream_manager = StreamManager()
+async def _setup_default_avm_device():
+    global avm_devices
+    _ = await AVMUtils.create_avm_device(pulse)
+    avm_devices[_.info.owner_module] = _
 
 
 async def _register_templates():
@@ -46,12 +46,12 @@ def create_app():
 
     @app.context_processor
     async def context_processor():
-        return dict(isinstance=isinstance, StreamedInput=StreamedInput, PulseSinkInputInfo=PulseSinkInputInfo, PulseSourceInfo=PulseSourceInfo)
+        return dict(isinstance=isinstance, PulseSinkInputInfo=PulseSinkInputInfo, PulseSourceInfo=PulseSourceInfo)
 
     @app.before_serving
     async def startup():
         await _setup_pa_session()
-        await _setup_stream_manager()
+        await _setup_default_avm_device()
         await _setup_error_handlers()
         await _register_templates()
 
