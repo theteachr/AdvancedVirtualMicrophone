@@ -96,7 +96,7 @@ class AVMUtils:
                 _created = await pulse.module_load('module-pipe-source',
                                                    f'source_name={input_name} file={fifo_path} '
                                                    f'format={pcm_sample_format} rate={bitrate} channels={channels} '
-                                                   f'source_properties=node.description={input_desc}')
+                                                   f'source_properties=device.description={input_desc}')
                 _created = next(filter(lambda _: _.owner_module == _created, await pulse.source_list()))
 
             except (PulseError, StopIteration):
